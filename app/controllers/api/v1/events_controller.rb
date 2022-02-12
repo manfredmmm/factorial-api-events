@@ -2,8 +2,8 @@ module Api
   module V1
     class EventsController < ApplicationController
       def index
-        events = Event.all
-        render json: EventsRepresenter.new(events).as_json_array
+        @events = Event.all
+        render template: 'events/index', formats: [:json]
       end
 
       def create
@@ -22,8 +22,8 @@ module Api
       end
 
       def show
-        events = Event.find(params[:id])
-        render json: EventsRepresenter.new(events).as_json_object
+        @event = Event.find(params[:id])
+        render template: 'events/show', formats: [:json]
       end
 
       def update
