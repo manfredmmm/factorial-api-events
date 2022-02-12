@@ -7,13 +7,7 @@ module Api
       end
 
       def create
-        event = Event.new(event_params)
-        if params[:start_date]
-          event.start_date = Time.at(params[:start_date].to_i)
-        end
-        if params[:end_date]
-          event.end_date = Time.at(params[:end_date].to_i)
-        end
+        event = Event.new(build_params)
         if event.save
           render json: event, status: :created
         else
@@ -28,20 +22,7 @@ module Api
 
       def update
         event = Event.find(params[:id])
-        #if params[:start_date]
-        #  params[:start_date] = Time.at(params[:start_date].to_i)
-        #end
-        #if params[:end_date]
-        #  params[:end_date] = Time.at(params[:end_date].to_i)
-        #end
-        update_params = event_params
-        if update_params[:start_date]
-          update_params[:start_date] = Time.at(update_params[:start_date].to_i)
-        end
-        if update_params[:end_date]
-          update_params[:end_date] = Time.at(update_params[:end_date].to_i)
-        end
-        if event.update(update_params)
+        if event.update(build_params)
           render json: event
         else
           render json: event.errors, status: :unprocessable_entity
@@ -55,11 +36,19 @@ module Api
 
       private
 
-      def event_params
-        params.require(:event).permit(:title, :description, :start_date, :end_date)
+      def build_params
+        {
+          title: params[:title],
+          description: params[:description],
+          start_date: parse_date(params[:start_date]),
+          end_date: parse_date(params[:end_date])
+        }
+      end
+
+      def parse_date(date)
+        return nil unless date.present?
+        Time.at(date.to_i)
       end
     end
   end
 end
-
-# Validar peticio JWT
