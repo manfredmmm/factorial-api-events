@@ -28,14 +28,12 @@ module Api
 
       def update
         event = Event.find(params[:id])
-
         #if params[:start_date]
         #  params[:start_date] = Time.at(params[:start_date].to_i)
         #end
         #if params[:end_date]
         #  params[:end_date] = Time.at(params[:end_date].to_i)
         #end
-
         update_params = event_params
         if update_params[:start_date]
           update_params[:start_date] = Time.at(update_params[:start_date].to_i)
@@ -43,7 +41,7 @@ module Api
         if update_params[:end_date]
           update_params[:end_date] = Time.at(update_params[:end_date].to_i)
         end
-        if event.update(event_params)
+        if event.update(update_params)
           render json: event
         else
           render json: event.errors, status: :unprocessable_entity
@@ -64,5 +62,4 @@ module Api
   end
 end
 
-# Revisar el rack throttle no funciona
 # Validar peticio JWT
