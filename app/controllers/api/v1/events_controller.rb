@@ -23,7 +23,7 @@ module Api
       def update
         event = Event.find(params[:id])
         if event.update(build_params)
-          render json: event
+          render json: event, status: :ok
         else
           render json: event.errors, status: :unprocessable_entity
         end
